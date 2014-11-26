@@ -3,14 +3,31 @@ from django.contrib.auth.models import User
 from teachers.models import Teacher
 
 #
+# Status progressions
+#
+class Status(models.Model):
+  name = models.CharField(max_length=30, unique=True)
+
+#
+# Course organization
+#
+class Theme(models.Model):
+  name = models.CharField(max_length=30)
+
+class Chapter(models.Model):
+  name = models.CharField(max_length=30)
+
+  theme = models.ForeignKey(Theme)
+
+#
 # Course build
 #
 class Course(models.Model):
   name = models.CharField(max_length=30, unique=True)
   description = models.TextField()
-  difficulty = models.IntegerField
+  difficulty = models.IntegerField()
 
-  author = models.ForeignKey(Teacher)
+  author = models.ForeignKey(Teacher, related_name="author")
   chapter = models.ForeignKey(Chapter)
   favorites = models.ManyToManyField(User)
   # videos = models.ManyToManyField(Video)
@@ -27,23 +44,12 @@ class Page(models.Model):
 
   course = models.ForeignKey(Course)
 
-class Section(models.Model)
+class Section(models.Model):
   name = models.CharField(max_length=30)
   content = models.TextField()
   order = models.IntegerField()
 
   page = models.ForeignKey(Page)
-
-#
-# Course organization
-#
-class Theme(models.Model):
-  name = models.CharField(max_length=30)
-
-class Chapter(models.Model):
-  name = models.CharField(max_length=30)
-
-  theme = models.ForeignKey(Theme)
 
 #
 # User functionalities
@@ -68,9 +74,6 @@ class Progression(models.Model):
   page = models.ForeignKey(Page)
   status = models.ForeignKey(Status)
   user = models.ForeignKey(User)
-
-class Status(models.Model):
-  name = models.CharField(max_length=30, unique=True)
 
 #
 # Various
