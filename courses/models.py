@@ -1,23 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from teachers.models import Teacher
 
 #
 # Status progressions
 #
 class Status(models.Model):
   name = models.CharField(max_length=30, unique=True)
-
-#
-# Course organization
-#
-class Theme(models.Model):
-  name = models.CharField(max_length=30)
-
-class Chapter(models.Model):
-  name = models.CharField(max_length=30)
-
-  theme = models.ForeignKey(Theme)
 
 #
 # Course build
@@ -27,9 +15,9 @@ class Course(models.Model):
   description = models.TextField()
   difficulty = models.IntegerField()
 
-  author = models.ForeignKey(Teacher, related_name="author")
-  chapter = models.ForeignKey(Chapter)
-  favorites = models.ManyToManyField(User)
+  author = models.ForeignKey('teachers.Teacher')
+  chapter = models.ForeignKey('teachers.Chapter')
+  favorites = models.ManyToManyField(User, related_name="favorite_courses")
   # videos = models.ManyToManyField(Video)
   # images = models.ManyToManyField(Video)
   # definitions = models.ManyToManyField(Definition)
@@ -43,6 +31,9 @@ class Page(models.Model):
   order = models.IntegerField()
 
   course = models.ForeignKey(Course)
+  
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 class Section(models.Model):
   name = models.CharField(max_length=30)
@@ -50,6 +41,9 @@ class Section(models.Model):
   order = models.IntegerField()
 
   page = models.ForeignKey(Page)
+  
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 #
 # User functionalities
@@ -69,11 +63,17 @@ class Request(models.Model):
   content = models.TextField()
 
   user = models.ForeignKey(User)
+  
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 class Progression(models.Model):
   page = models.ForeignKey(Page)
   status = models.ForeignKey(Status)
   user = models.ForeignKey(User)
+  
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 #
 # Various
