@@ -83,7 +83,7 @@ class Definition(models.Model):
     definition = models.TextField()
 
 class Video(models.Model):
-    video = FileField(upload_to="courses/static/courses/uploads/videos/%" % self.id)
+    video = models.FileField(upload_to="courses/static/courses/uploads/videos/")
 
 class Image(models.Model):
-    image = ImageField(upload_to="courses/static/courses/uploads/images/%" % self.id)
+    image = models.ImageField(upload_to="courses/static/courses/uploads/images/")
