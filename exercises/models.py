@@ -10,7 +10,6 @@ class Skill(models.Model):
 #
 class Exercise_type(models.Model):
     title = models.CharField(max_length=20)
-    exercise = models.ForeignKey('Exercise')
     donnees = models.CharField(max_length=50)
     user = models.ManyToManyField('students.Student')
     skill = models.ManyToManyField(Skill)
