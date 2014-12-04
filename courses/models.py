@@ -19,7 +19,7 @@ class Course(models.Model):
     chapter = models.ForeignKey('teachers.Chapter')
     favorites = models.ManyToManyField(User, related_name="favorite_courses")
     # videos = models.ManyToManyField(Video)
-    # images = models.ManyToManyField(Video)
+    # images = models.ManyToManyField(Image)
     # definitions = models.ManyToManyField(Definition)
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,7 +48,7 @@ class Section(models.Model):
 #
 # User functionalities
 #
-class Comment(models.Model):
+class CourseComment(models.Model):
     content = models.TextField()
     
     user = models.ForeignKey(User)
@@ -58,7 +58,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class Request(models.Model):
+class CourseRequest(models.Model):
     name = models.CharField(max_length=30)
     content = models.TextField()
     
