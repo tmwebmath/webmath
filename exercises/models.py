@@ -24,7 +24,7 @@ class Exercise(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     num_exercise = models.IntegerField()
-    grade = models.CharField(max_length=50)
+    grade = models.CharField(max_length=60)
     type_donnees = models.ForeignKey(Exercise_type)
     indices = models.CharField(max_length=50)
     commentary = models.CharField(max_length=200)
