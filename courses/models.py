@@ -86,4 +86,8 @@ class Video(models.Model):
     video = models.FileField(upload_to="courses/static/courses/uploads/videos/")
 
 class Image(models.Model):
+
+    def filename(instance, filename):
+        return "/courses/static/courses/uploads/images/"
+
     image = models.ImageField(upload_to="courses/static/courses/uploads/images/")
