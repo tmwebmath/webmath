@@ -83,11 +83,15 @@ class Definition(models.Model):
     definition = models.TextField()
 
 class Video(models.Model):
-    video = models.FileField(upload_to="courses/static/courses/uploads/videos/")
+
+    def filename(instance, filename):
+        return "/courses/static/courses/uploads/videos/{}/{}".format(instance.pk, filename)
+
+    video = models.FileField(upload_to=filename)
 
 class Image(models.Model):
 
-    def name(instance, filename):
-        return "/courses/static/courses/uploads/images/"
+    def filename(instance, filename):
+        return "/courses/static/courses/uploads/images/{}/{}".format(instance.pk, filename)
 
-    image = models.ImageField(upload_to="courses/static/courses/uploads/images/")
+    image = models.ImageField(upload_to=filename)

@@ -1,0 +1,5 @@
+<h1>{{ course.name }}</h1>
+<div mathjax class="margin bottom ng-hide" ng-repeat="section in page.sections" ng-bind-html="section.content">
+</div>
+<div class="pull-left"><button class="btn btn-default" ng-disabled="firstPage()" ng-click="previousPage()">Précédent</button></div>
+<div class="pull-right"><button class="btn btn-default" ng-disabled="lastPage()" ng-click="nextPage()">Suivant</button></div>
