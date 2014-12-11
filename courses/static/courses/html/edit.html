@@ -1,5 +1,7 @@
 <h1>{{ course.name }}</h1>
 
+<h2><input type="text" ng-model="page.name"></h2>
+
 <div class="pull-right margin bottom">
   <button type="button" ng-click="saveCourse()" class="btn btn-default"><span class="glyphicon glyphicon-floppy-disk"></span> Enregistrer</button>
   <a ng-href="#/{{ course.id }}/preview/{{ page.id }}"><button type="button" ng-click="preview()" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Aperçu</button></a>
@@ -9,8 +11,9 @@
 
   <div class="margin bottom">
     <div ng-repeat="(id, section) in page.sections" class="form-group">
+      <div class="col-sm-10" id="section-name"><input type="text" ng-model="section.name" class="form-control"></div>
       <div>
-        <textarea class="col-sm-10" ng-model="section.content" msd-elastic="\n"></textarea>
+        <textarea class="col-sm-10" ng-model="section.markdown_content" msd-elastic="\n"></textarea>
         <div class="col-sm-1 block">
           <div><span class="glyphicon glyphicon-remove" ng-click="removeSection(id)"></span></div>
           <div><span class="glyphicon glyphicon-chevron-up"></span></div>
@@ -29,9 +32,12 @@
   </div>
 
 </form>
-
+<!--
 <div>
   <input type="file" ng-file-select="onFileSelect($files)">
   <div class="button" ng-file-select="onFileSelect($files)" data-multiple="true"></div>
   <button ng-click="upload.abort()">Cancel Upload</button>
 </div>
+-->
+
+{{ page }}
