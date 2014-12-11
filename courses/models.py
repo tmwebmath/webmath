@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from teachers.models import Teacher, Chapter
 
 #
 # Status progressions
@@ -15,9 +16,9 @@ class Course(models.Model):
     description = models.TextField()
     difficulty = models.IntegerField()
     
-    author = models.ForeignKey('teachers.Teacher')
-    chapter = models.ForeignKey('teachers.Chapter')
-    favorites = models.ManyToManyField(User, related_name="favorite_courses")
+    author = models.ForeignKey('teachers.Teacher', related_name="courses")
+    chapter = models.ForeignKey('teachers.Chapter', related_name="courses")
+    favorites = models.ManyToManyField(User, related_name="favorite_courses", blank=True, null=True)
     # videos = models.ManyToManyField(Video)
     # images = models.ManyToManyField(Image)
     # definitions = models.ManyToManyField(Definition)
@@ -25,22 +26,32 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+      return self.name
+
+    def total_pages(self):
+        return self.pages.count()
+
+
 class Page(models.Model):
     name = models.CharField(max_length=30)
-    content = models.TextField()
     order = models.IntegerField()
     
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, related_name="pages")
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+      return self.name
+
 class Section(models.Model):
     name = models.CharField(max_length=30)
-    content = models.TextField()
+    markdown_content = models.TextField(default="")
+    html_content = models.TextField(default="")
     order = models.IntegerField()
     
-    page = models.ForeignKey(Page)
+    page = models.ForeignKey(Page, related_name="sections")
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
