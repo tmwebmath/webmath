@@ -189,7 +189,7 @@ MathJax.Hub.Config({
   //  you will need to call MathJax.Hub.Typeset() yourself by hand, set
   //  this value to true.
   //
-  skipStartupTypeset: true,
+  skipStartupTypeset: false,
   
   //
   //  A list of element ID's that are the ones to process for mathematics
