@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'teachers',
     'students',
     'exercises',
-    'tastypie',
+    'restless',
 )
 
 MIDDLEWARE_CLASSES = (
