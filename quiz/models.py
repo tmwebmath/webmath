@@ -5,7 +5,7 @@ from django.db import models
 class Quiz(models.Model): #Infos générales sur le quiz
     title = models.CharField(max_length=100)
     creation_date = models.DateField()
-    #code = models.CharField(max_length=1000) #Format texte du quiz
+    code = models.CharField(max_length=1000) #Format texte du quiz
     id_prof = models.ForeignKey('teachers.Teacher')
     id_chapter = models.ForeignKey('teachers.Chapter')
     
