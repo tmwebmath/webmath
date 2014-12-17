@@ -24,6 +24,17 @@ class CourseList(ListEndpoint):
 class CourseDetail(DetailEndpoint):
     model = Course
 
+class CoursePageList(ListEndpoint):
+    model = Course
+
+    def post(self, request, course_id):
+        course = Course.objects.get(id=course_id)
+        order = course.pages.count() + 1
+        page = Page(name="Titre de la page", order=order, course_id=course.id)
+        page.save()
+        page.sections.create(name="Première section", order=1)
+        return Http201(serialize_page(page, course))
+
 class PageCourseDetail(DetailEndpoint):
     model = Page
 
@@ -45,6 +56,19 @@ class PageCourseDetail(DetailEndpoint):
             if section_form.is_valid():
                 section_form.save()
         return Http200(serialize_page(page, course))
+
+class PageSectionList(ListEndpoint):
+    model = Section
+    
+    def post(self, request, page_id):
+        page = Page.objects.get(id=page_id)
+        order = page.sections.count()
+        section = page.sections.create(name="Editer ici", markdown_content="Et ici", order=order)
+        section.save()
+        return Http201(serialize_page(page, page.course))
+
+class SectionDetail(DetailEndpoint):
+    model = Section
 
 
 class ThemeList(ListEndpoint):

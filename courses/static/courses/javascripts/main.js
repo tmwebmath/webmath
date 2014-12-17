@@ -34,20 +34,39 @@ app.config(function($routeProvider, $resourceProvider){
 
 app.factory('Course', ['$resource', function($resource) {
   return $resource(
-    'api/courses/:courseId',
-    {courseId: '@id'}
+    'api/courses/:courseId/:resource',
+    {courseId: '@id'},
+    {
+      add_page: { method: 'POST', params: { resource: 'pages' }}
+    }
   );
 }]);
 
 app.factory('Page', ['$resource', function($resource) {
   return $resource(
-    'api/pages/:pageId/courses/:courseId',
-    {pageId: '@id', courseId: '@course_id'},
+    'api/pages/:pageId/:resource/:objectId',
+    {pageId: '@id', resource: 'courses'},
     {
-      update: {
-        method: 'PUT'
-      }
+      update: { method: 'PUT' },
+      add_section: { method: 'POST', params: {resource: 'sections' }}
     }
+  );
+}]);
+
+app.factory('Range', function() {
+  return function(start, end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+        result.push(i);
+    }
+    return result;
+  };
+});
+
+app.factory('Section', ['$resource', function($resource) {
+  return $resource(
+    'api/sections/:sectionId',
+    {sectionId: '@id'}
   );
 }]);
 
@@ -87,44 +106,52 @@ app.controller('AboutController', function() {
 });
 
 app.controller('NewCourseController', ['$scope', '$location', '$http', 'Course', function($scope, $location, $http, Course) {
-  $http.get('api/themes').success(function(data) {
-    $scope.themes = data;
+  $http.get('api/themes').success(function(themes) {
+    $scope.themes = themes;
   });
 
-	$scope.create = function(course) {
-		new_course = new Course(course);
-    response = new_course.$save(function(response) {
-      $location.path(response.id + "/edit/1");
+	$scope.createCourse = function() {
+		course = new Course($scope.course);
+    course.$save(function(course) {
+      $location.path(course.id + "/edit/1");
     });
 	};
 }]);
 
-app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '$upload', '$filter', 'Page', 
-  function($scope, $routeParams, $location, $upload, $filter, Page) {
+app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '$upload', 'Section', '$filter', 'Page', 'Course', 'Range',
+  function($scope, $routeParams, $location, $upload, Section, $filter, Page, Course, Range) {
 
-    $scope.page = Page.get({ pageId: $routeParams.pageId, courseId: $routeParams.courseId }, function(page) {
-      $scope.course = page.course;
-    })
+    $scope.page = Page.get({ pageId: $routeParams.pageId, objectId: $routeParams.courseId }, function(page) {
+      $scope.course = new Course(page.course);
+    });
+
+    $scope.Range = Range
 
     $scope.newSection = function() {
-      // TODO: add in the database
-      $scope.page.sections["6"] = {"content":""}
+      $scope.page.$add_section()
     };
-    $scope.removeSection = function(id) {
-      // TODO: delete in the database
-      delete $scope.page.sections[id]
+    $scope.removeSection = function(key) {
+      section = new Section($scope.page.sections[key]);
+      section.$delete(function() {
+        $scope.page.sections.splice(key, 1);
+      });
     };
     $scope.saveCourse = function() {
       angular.forEach($scope.page.sections, function(value, key) {
-        $scope.page.sections[key].html_content = $filter('markdown')($scope.page.sections[key].html_content)
+        $scope.page.sections[key].html_content = $filter('markdown')($scope.page.sections[key].markdown_content)
       });
-      $scope.page.$update({courseId: $scope.course.id}, function() {
+      $scope.page.$update({ objectId: $scope.course.id }, function() {
         alert('saved !');
       });
     };
     $scope.newPage = function() {
       // TODO: save course in the database and add a new page
-      $location.path($scope.course.id + "/edit/2")
+      $scope.course.$add_page(function(page) {
+        $scope.page = page;
+        $scope.course = page.course;
+        $location.path($scope.course.id + "/edit/" + $scope.page.order)
+      });
+      
     };
     $scope.isCurrentPage = function(page) {
       return page.id === $scope.page.id;
@@ -149,7 +176,6 @@ app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '
 ]);
 
 app.controller('PreviewCourseController', ['$scope', '$routeParams', 'Page', function($scope, $routeParams, Page) {
-  // TODO: fetch only the right page
   $scope.page = Page.get({ pageId: $routeParams.pageId, courseId: $routeParams.courseId }, function(page) {
     $scope.course = page.course
   })
