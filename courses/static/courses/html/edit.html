@@ -1,6 +1,6 @@
 <h1>{{ course.name }}</h1>
 
-<h2><input type="text" ng-model="page.name"></h2>
+<div class="col-sm-4"><input id="page-name" class="form-control" type="text" ng-model="page.name"></div>
 
 <div class="pull-right margin bottom">
   <button type="button" ng-click="saveCourse()" class="btn btn-default"><span class="glyphicon glyphicon-floppy-disk"></span> Enregistrer</button>
@@ -10,12 +10,12 @@
 <form class="form-horizontal" role="form" name="editCourse" ng-submit="newCourse.$valid && saveCourse()" novalidate>
 
   <div class="margin bottom">
-    <div ng-repeat="(id, section) in page.sections" class="form-group">
-      <div class="col-sm-10" id="section-name"><input type="text" ng-model="section.name" class="form-control"></div>
+    <div ng-repeat="(key, section) in page.sections" class="form-group">
+      <div class="col-sm-10 " id="input-margin"><input id="section-name" type="text" ng-model="section.name" class="form-control"></div>
       <div>
         <textarea class="col-sm-10" ng-model="section.markdown_content" msd-elastic="\n"></textarea>
         <div class="col-sm-1 block">
-          <div><span class="glyphicon glyphicon-remove" ng-click="removeSection(id)"></span></div>
+          <div><span class="glyphicon glyphicon-remove" ng-click="removeSection(key)"></span></div>
           <div><span class="glyphicon glyphicon-chevron-up"></span></div>
           <div><span class="glyphicon glyphicon-chevron-down"></span></div>
         </div>
@@ -26,7 +26,7 @@
   <div class="form-group">
     <div class="pull-left"><button class="btn btn-default" ng-click="newSection()" type="button"><span class="glyphicon glyphicon-plus"></span></button></div>
     <div class="pull-right page-links">
-      <span ng-repeat="page in course.pages"><a ng-class="{disabled: isCurrentPage(page)}" ng-href="#/{{ course.id }}/edit/{{ page.id }}">{{ page.id }}</a></span>
+      <span ng-repeat="page in pages"><a ng-class="{disabled: isCurrentPage(page)}" ng-href="#/{{ course.id }}/edit/{{ page.id }}">{{ page.id }}</a></span>
       <button class="btn btn-default" ng-click="newPage()"><span class="glyphicon glyphicon-file"></span> Nouvelle page</button>
     </div>
   </div>
@@ -39,5 +39,4 @@
   <button ng-click="upload.abort()">Cancel Upload</button>
 </div>
 -->
-
-{{ page }}
+<div ng-repeat="number in Range(1,9)">{{ number }}</div>

@@ -75,9 +75,15 @@ button:hover {
 }
 
 #section-name {
+  font-size: 16px;
+} 
+#page-name {
+  font-size: 24px;
+}
+#input-margin {
   margin: 10px 0px 10px 0px;
   padding: 0;
-} 
+}
 
 /* Home */
 .course-block {

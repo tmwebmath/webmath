@@ -48,7 +48,7 @@ class Page(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length=30)
     markdown_content = models.TextField(default="")
-    html_content = models.TextField(default="")
+    html_content = models.TextField(blank=True)
     order = models.IntegerField()
     
     page = models.ForeignKey(Page, related_name="sections")

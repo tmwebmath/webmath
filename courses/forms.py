@@ -17,4 +17,4 @@ class PageForm(ModelForm):
 class SectionForm(ModelForm):
     class Meta:
         model = Section
-        fields = ['name', 'html_content', 'markdown_content']
+        fields = ['name', 'html_content', 'markdown_content', 'order', 'page']
