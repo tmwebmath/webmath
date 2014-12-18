@@ -176,13 +176,13 @@ app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '
 ]);
 
 app.controller('PreviewCourseController', ['$scope', '$routeParams', 'Page', function($scope, $routeParams, Page) {
-  $scope.page = Page.get({ pageId: $routeParams.pageId, courseId: $routeParams.courseId }, function(page) {
+  $scope.page = Page.get({ pageId: $routeParams.pageId, objectId: $routeParams.courseId }, function(page) {
     $scope.course = page.course
   })
 }]);
 
 app.controller('ViewCourseController', ['$scope', '$routeParams', '$location', 'Page', function($scope, $routeParams, $location, Page) {
-  $scope.page = Page.get({ pageId: $routeParams.pageId, courseId: $routeParams.courseId }, function(page) {
+  $scope.page = Page.get({ pageId: $routeParams.pageId, objectId: $routeParams.courseId }, function(page) {
     $scope.course = page.course
     
     $scope.firstPage = function() {
