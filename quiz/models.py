@@ -4,10 +4,22 @@ from django.db import models
 
 class Quiz(models.Model): #Infos générales sur le quiz
     title = models.CharField(max_length=100)
+    
+    # DONC : il faudrait initialiser ce champ avec la date actuelle, car cette 
+    # date est normalement égale à la date à laquelle l'instance est créée
+    # dans une vue. Je mettrais plutôt un DateTimeField, car il est parfois
+    # utile de connaitre l'heure de création...
     creation_date = models.DateField()
     code = models.CharField(max_length=1000) #Format texte du quiz
     id_prof = models.ForeignKey('teachers.Teacher')
+    
+    # DONC : je ne suis pas très convaincu par cette ForeignKey, car cela implique qu'un
+    # quiz est nécessairemement rattaché à un seul chapitre. Il faudrait plutôt 
+    # une relation nc-nc à mon sens.
     id_chapter = models.ForeignKey('teachers.Chapter')
+    
+    # DONC : il manque probablement une relation ManyToMany vers Student à travers
+    # la table CompletedQuiz qui ferait office de table de jonction
     
 class CompletedQuiz(models.Model): #Tentative de réponse au quiz par un élève
     submit_date = models.DateField()
@@ -21,6 +33,11 @@ class CompletedQuiz(models.Model): #Tentative de réponse au quiz par un élève
 class QuizQuestion(models.Model): #Classe abstraite dont héritent toutes les questions
     text = models.CharField(max_length=200) #Énoncé
     comment = models.CharField(max_length=200) #Commentaire affiché lors de la correction
+    
+    # DONC : il faudrait trouver un moyen pour qu'il soit garranti qu'il n'y ait
+    # jamais deux questions avec le même numéro dans le même quiz (peut-on imposer
+    # cette contrainte avec la définition des modèles Django ???)
+    # indication : http://stackoverflow.com/questions/4522648/unique-foreign-key-pairs-with-django
     number = models.IntegerField() #Ordre de la question dans le quiz
     id_quiz = models.ForeignKey(Quiz)
     
