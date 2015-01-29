@@ -20,7 +20,7 @@ class Quiz(models.Model): #Infos générales sur le quiz
     id_chapter = models.ForeignKey('teachers.Chapter')
     
     # DONC : il manque probablement une relation ManyToMany vers Student à travers
-    # la table CompletedQuiz qui ferait office de table de jonction
+    # la table CompletedQuiz qui ferait office de table de jonctionqreqrewqrewqrewqrweqrewqwerwqerqwerwqrewqerqwerwqerqwerwqerwqerqwrwqer qwer
     
 class CompletedQuiz(models.Model): #Tentative de réponse au quiz par un élève
     submit_date = models.DateField()
