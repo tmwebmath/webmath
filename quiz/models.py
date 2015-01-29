@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+# Commentaire vraiment inutile
 
 class Quiz(models.Model): #Infos générales sur le quiz
     title = models.CharField(max_length=100)
@@ -26,7 +27,7 @@ class CompletedQuiz(models.Model): #Tentative de réponse au quiz par un élève
     id_quiz = models.ForeignKey(Quiz) #Relation avec le quiz complété
     id_student = models.ForeignKey('students.Student')
 
-#    
+#
 #Classes abstraites
 #
 
