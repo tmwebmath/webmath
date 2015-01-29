@@ -6,3 +6,7 @@ class Student(User):
     
     def __str__(self):
         return '%s %s' % (self.prenom, self.nom)
+        
+
+class NouveauModele():
+    #Ici aura lieu la naissance d'un modele extraordinaire
