@@ -53,13 +53,13 @@ app.factory('Page', ['$resource', function($resource) {
   );
 }]);
 
-app.factory('Range', function() {
-  return function(start, end) {
-    var result = [];
-    for (var i = start; i <= end; i++) {
-        result.push(i);
-    }
-    return result;
+app.filter('range', function() {
+  return function(input, min, max) {
+    min = parseInt(min);
+    max = parseInt(max) + 1;
+    for (var i=min; i<max; i++)
+      input.push(i);
+    return input;
   };
 });
 
@@ -81,11 +81,13 @@ app.filter('markdown', function() {
 app.directive('mathjax', ['$timeout', function($timeout) {
   return {
     restrict: 'AE',
+    template: '<div class="ng-hide" ng-transclude></div>',
+    transclude: true,
     link: function(scope, element, attrs) {
       $timeout(function () {
         MathJax.Hub.Queue(["Typeset", MathJax.Hub, element[0]]);
         MathJax.Hub.Queue(function() {
-          element.removeClass("ng-hide");
+          element.children().removeClass("ng-hide");
         })
       });
     }
@@ -118,14 +120,12 @@ app.controller('NewCourseController', ['$scope', '$location', '$http', 'Course',
 	};
 }]);
 
-app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '$upload', 'Section', '$filter', 'Page', 'Course', 'Range',
+app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '$upload', 'Section', '$filter', 'Page', 'Course',
   function($scope, $routeParams, $location, $upload, Section, $filter, Page, Course, Range) {
 
     $scope.page = Page.get({ pageId: $routeParams.pageId, objectId: $routeParams.courseId }, function(page) {
       $scope.course = new Course(page.course);
     });
-
-    $scope.Range = Range
 
     $scope.newSection = function() {
       $scope.page.$add_section()
@@ -135,6 +135,23 @@ app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '
       section.$delete(function() {
         $scope.page.sections.splice(key, 1);
       });
+      // TODO: rewrite order
+    };
+    $scope.upSection = function(key) {
+      $scope.page.sections[key].order -= 1
+      $scope.page.sections[key - 1].order += 1
+      $scope.page.$update({ objectId: $scope.course.id }, function() {
+        alert('saved !');
+      });
+    };
+    $scope.downSection = function(key) {
+      if($scope.page.sections[key + 1])
+      $scope.page.sections[key].order += 1
+      $scope.page.sections[key + 1].order -= 1
+      $scope.page.$update({ objectId: $scope.course.id }, function() {
+        alert('saved !');
+      });
+      
     };
     $scope.saveCourse = function() {
       angular.forEach($scope.page.sections, function(value, key) {
@@ -153,8 +170,8 @@ app.controller('EditCourseController', ['$scope', '$routeParams', '$location', '
       });
       
     };
-    $scope.isCurrentPage = function(page) {
-      return page.id === $scope.page.id;
+    $scope.isCurrentPage = function(number) {
+      return number === $scope.page.id;
     };
     $scope.onFileSelect = function($files) {
       for (var i = 0; i < $files.length; i++) {

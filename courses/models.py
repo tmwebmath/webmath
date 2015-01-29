@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from teachers.models import Teacher, Chapter
 
 #
 # Status progressions
@@ -55,6 +54,12 @@ class Section(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+      return self.name
 
 #
 # User functionalities

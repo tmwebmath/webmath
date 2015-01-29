@@ -1,6 +1,6 @@
 <h1>{{ course.name }}</h1>
 <h2>{{ page.name }}</h2>
-<div mathjax class="margin bottom ng-hide" ng-repeat="section in page.sections">
+<div mathjax class="margin bottom" ng-repeat="section in page.sections">
   <h3>{{ section.name }}</h3>
   <div ng-bind-html="section.html_content"></div>
 </div>

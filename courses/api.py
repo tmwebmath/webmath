@@ -10,6 +10,10 @@ from teachers.models import Theme, Teacher
 class CourseList(ListEndpoint):
     model = Course
 
+    # /courses
+    # GET
+
+    # POST: create a new course
     def post(self, request):
         course_form = CourseForm(request.data)
         if course_form.is_valid():
@@ -21,12 +25,22 @@ class CourseList(ListEndpoint):
             page.sections.create(name="Première section", order=1)
             return Http201(self.serialize(course))
 
+
 class CourseDetail(DetailEndpoint):
     model = Course
+
+    # /courses/id
+    # GET
+    # PUT
+    # DELETE
 
 class CoursePageList(ListEndpoint):
     model = Course
 
+    # /courses/id/pages
+    # GET
+
+    # POST: add a new page to a course
     def post(self, request, course_id):
         course = Course.objects.get(id=course_id)
         order = course.pages.count() + 1
@@ -38,11 +52,16 @@ class CoursePageList(ListEndpoint):
 class PageCourseDetail(DetailEndpoint):
     model = Page
 
+    # /courses/id/pages/id
+    # DELETE
+
+    # GET: get all pages for a course
     def get(self, request, page_id, course_id):
         course = Course.objects.get(id=course_id)
         page = course.pages.get(order=page_id)
         return serialize_page(page, course)
 
+    # PUT: save the page's content
     def put(self, request, page_id, course_id):
         course = Course.objects.get(id=course_id)
         page = Page.objects.get(id=page_id)
@@ -59,10 +78,14 @@ class PageCourseDetail(DetailEndpoint):
 
 class PageSectionList(ListEndpoint):
     model = Section
+
+    # /pages/id/sections
+    # GET
     
+    # POST: Add a new section to a page
     def post(self, request, page_id):
         page = Page.objects.get(id=page_id)
-        order = page.sections.count()
+        order = page.sections.count() + 1
         section = page.sections.create(name="Editer ici", markdown_content="Et ici", order=order)
         section.save()
         return Http201(serialize_page(page, page.course))
@@ -70,9 +93,18 @@ class PageSectionList(ListEndpoint):
 class SectionDetail(DetailEndpoint):
     model = Section
 
+    # /section/id
+    # GET
+    # PUT
+    # DELETE
+
 
 class ThemeList(ListEndpoint):
 
+    # /themes
+    # POST
+
+    # GET: get all themes included the chapters
     def get(self, request):
         themes = Theme.objects.all()
         return serialize(themes, include=[

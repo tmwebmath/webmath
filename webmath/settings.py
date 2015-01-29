@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'teachers',
     'students',
     'exercises',
+    'quiz',
     'restless',
 )
 

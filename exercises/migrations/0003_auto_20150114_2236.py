@@ -7,9 +7,9 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0001_initial'),
-        ('students', '0001_initial'),
-        ('teachers', '0001_initial'),
+        ('students', '0002_student'),
+        ('teachers', '0002_auto_20150114_2236'),
+        ('exercises', '0002_correction_exercise_exercise_type_skill'),
     ]
 
     operations = [
@@ -33,14 +33,14 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='exercise',
-            name='author',
-            field=models.ForeignKey(to='teachers.Teacher'),
+            name='chapter',
+            field=models.ManyToManyField(to='teachers.Chapter'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exercise',
-            name='chapter',
-            field=models.ManyToManyField(to='teachers.Chapter'),
+            name='owner',
+            field=models.ForeignKey(to='teachers.Teacher'),
             preserve_default=True,
         ),
         migrations.AddField(

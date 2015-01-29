@@ -8,9 +8,9 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('teachers', '0002_auto_20150114_2236'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('courses', '0001_initial'),
-        ('teachers', '0001_initial'),
+        ('courses', '0002_auto_20150114_2236'),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='favorites',
-            field=models.ManyToManyField(related_name='favorite_courses', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, blank=True, related_name='favorite_courses', null=True),
             preserve_default=True,
         ),
     ]
