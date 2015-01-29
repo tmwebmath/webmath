@@ -6,3 +6,8 @@ class Student(User):
     
     def __str__(self):
         return '%s %s' % (self.prenom, self.nom)
+        
+        
+
+class NouveauModele (models.Model):
+    #Nouveau modele en chocolat
