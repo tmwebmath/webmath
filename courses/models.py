@@ -94,9 +94,9 @@ class Progression(models.Model):
 #
 # Various
 #
-class Definition(models.Model):
-    word = models.CharField(max_length=20)
-    definition = models.TextField()
+#class Definition(models.Model):
+#    word = models.CharField(max_length=20)
+#    definition = models.TextField()
 
 class Video(models.Model):
 
